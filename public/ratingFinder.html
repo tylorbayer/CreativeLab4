@@ -1,0 +1,75 @@
+<html>
+<head>
+<title>Rating Finder</title>
+<script src="https://code.jquery.com/jquery-1.10.2.js"></script>
+<style>
+    body {
+        background-color:bisque;
+        text-align: center;
+        font-family: fantasy;
+    }
+    h1 {
+        font-style: oblique;
+    background-color: skyblue;
+    }
+    #suggestion {
+        font-style: italic
+    }
+    #movieList {
+        width: 80;
+        margin-left: auto;
+        margin-right: auto;
+    }
+    p {
+        font-size: 20;
+        font-weight: bold;
+    }
+    #rating {
+        background-color: azure;
+    }
+</style>
+</head>
+<body>
+<h1>Movie IMDB Rating Finder</h1>
+<form>
+Enter A Movie in IMDB's top 250 List: <input type="text" id="movieField"><br><br>
+<span id="suggestion">Suggestion: </span><span id="txtHint"></span>
+<input id="movieButton" type="submit" value="Submit">
+</form>
+<p>Movie</p>
+<span id="displayMovie">No Movie</span>
+<p>IMDB Rating</p>
+<div id="rating">No Movie Selected</div>
+
+<script>
+$(document).ready(function() {
+$( "#movieField" ).keyup(function() {
+    var url = "../getMovie?q="+$("#movieField").val();
+  $.getJSON(url,function(data) {
+    var everything;
+    everything = "<ul id=\"movieList\">";
+    $.each(data, function(i,item) {
+      everything += "<li id=\"txtHint li\"> "+data[i].city;
+    });
+    everything += "</ul>";
+    $("#txtHint").html(everything);
+  })
+});
+    
+$("#movieButton").click(function(e){
+    var value = $("#movieField").val();
+    e.preventDefault();
+    $("#displayMovie").text(value);
+    var url = "../getMovieRating?q="+value;
+    console.log(url);
+    $.getJSON(url,function(data) {
+        console.log(data);
+        var rating = data[0].rating;
+        var everything = "<p>" + rating + "</p>";
+        $("#rating").html(everything);
+    });
+});
+});
+</script>
+</body>
+</html>
